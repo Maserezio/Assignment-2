@@ -10,21 +10,18 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 \newpage
+
 # Introduction
+This report presents the results of a survey data analysis project. The goal of the analysis is to explore and interpret the categorical and quantitative features in the data set. By answering specific research questions, we aim to gain valuable insights from the survey data. This report provides a summary of the exploratory data analysis, descriptive inference, and analytic inference conducted. The findings and interpretations presented here contribute to our understanding of the subject matter.
 
-\newpage
 # Data Set Description
+The data set for this assignment was created from the survey answers. It contains columns about gender, age, and academic program. The academic program column includes information not only about the program itself but also about the degree and university name. This column needs to be altered during preprocessing. Additionally, there are three answers, two of which are qualitative variables. The first is social media, indicating where the respondent spends the most time, and the second is how the respondent actually spends time on social media (activity). The qualitative variable represents the mean time in hours spent on social media per day. 
 
-\newpage
 # Exploratory Data Analysis
 
-\newpage
 # Descriptive Inference
 
-\newpage
 # Analytic Inference
 
-\newpage
 # Conclusions
