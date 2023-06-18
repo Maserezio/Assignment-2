@@ -58,3 +58,17 @@ ggplot(data = H3, aes(x = `Academic Program`, y = `Average Time `)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "Academic Program", y = "Average Time", title = "Average Time by Academic Program") +
   theme_minimal()
+
+
+H4 <- res %>% 
+  group_by(Gender, Activity) %>%
+  filter(Activity == "Chatting") %>% 
+  summarize(`Average Time ` = mean(`Time`))
+
+print(H4)
+
+
+ggplot(data = H4, aes(x = `Gender`, y = `Average Time `)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Academic Program", y = "Average Time", title = "Average Time on Chatting by Gender ") +
+  theme_minimal()
