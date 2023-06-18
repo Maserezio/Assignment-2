@@ -3,6 +3,8 @@ library(tidyr)
 library(ggplot2)
 library(readr)
 library(stringr)
+library(hrbrthemes)
+library(viridis)
 
 
 res <- read_delim("survey_results.csv", delim =";") %>% 
@@ -11,7 +13,16 @@ res <- read_delim("survey_results.csv", delim =";") %>%
          University = str_extract(`Academic Program`, "(TU W[i\\I]en|University of Zagreb|Erasmus student)")) %>% 
   select(-`Academic Program`) %>% 
   select(Gender, Age, `Academic Program` = Program, Degree, University,
-         `Social Media` = `Antwort 1`, `Time` = `Antwort 2`, `Activity` = `Antwort 3`)
+         `Social Media` = `Antwort 1`, `Time` = `Antwort 2`, `Activity` = `Antwort 3`)# %>%
+  
+res$Degree <- ifelse(is.na(res$Degree) & res$`Academic Program` == "Data Science", "MSc", res$Degree)
+res$University <- ifelse(is.na(res$University) & res$`Academic Program` == "Data Science", "TU Wien", res$University)
+
+res <- res %>%
+  group_by(`Social Media`) %>%
+  mutate(Count_Social_Media_Ppl = n())
+
+str(res)
 
 H1 <- res %>% 
   filter(`Activity` == "Watching entertainment content") %>% 
@@ -58,3 +69,21 @@ ggplot(data = H3, aes(x = `Academic Program`, y = `Average Time `)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "Academic Program", y = "Average Time", title = "Average Time by Academic Program") +
   theme_minimal()
+
+#bubblechart
+ggplot(res, aes(x = Time, y = Age, size = Count_Social_Media_ppl, fill = `Social Media`)) +
+  geom_point(alpha=0.7)
+
+# Most basic bubble plot
+res %>%
+  #arrange(desc(Time)) %>%
+  #mutate(`Social Media` = factor("Social Media")) %>%
+  ggplot(aes(x=Time, y=Age, size=Count_Social_Media_Ppl, fill=`Social Media`)) +
+  geom_point(alpha=0.5, shape=21, color="black") +
+  scale_size(range = c(.1, 24), name="Social Media Analysis") +
+  #scale_fill_viridis(discrete=TRUE, guide=FALSE, option="A") +
+  theme_ipsum() +
+  theme(legend.position="bottom") +
+  ylab("Age") +
+  xlab("Time") +
+  theme(legend.position = "right")
