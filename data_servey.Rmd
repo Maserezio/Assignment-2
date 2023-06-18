@@ -6,37 +6,133 @@ output: pdf_document
 ---
 
 ```{r}
-data <- read.csv('group_7.csv', sep = ";")
-print(data)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(stringr)
+
+res <- read_delim("group_7.csv", delim =";") %>%
+  mutate(Program = str_extract(`Academic Program`, "(Data Science|Business Informatics|Statistic|Statistik und Wirtschaftsmathematik)"),
+         Degree = str_extract(`Academic Program`, "[M/B][S/s]c"),
+         University = str_extract(`Academic Program`, "(TU W[i\\I]en|University of Zagreb|Erasmus student)")) %>% 
+  select(-`Academic Program`) %>% 
+  select(Gender, Age, `Academic Program` = Program, Degree, University,
+         `Social Media` = `Antwort 1`, `Time` = `Antwort 2`, `Activity` = `Antwort 3`)
+
+res$Degree <- ifelse(is.na(res$Degree) & res$`Academic Program` == "Data Science", "MSc", res$Degree)
+res$University <- ifelse(is.na(res$University) & res$`Academic Program` == "Data Science", "TU Wien", res$University)
+res
 ```
 
 ```{r}
-plot(data)
+plot(res)
 ```
 ```{r}
-plot(data$Age)
+plot(res$Age)
 ```
 ```{r}
-plot(data)
+plot <- ggplot(res, aes(x = `Social Media`, fill = as.factor(`Activity`))) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Density")
+plot
+```
+
+```{r}
+plot <- ggplot(res, aes(x = Age, fill = as.factor(Activity))) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Density of activities and age") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill = "Activities")
+  
+plot
+```
+
+```{r}
+plot3 <- ggplot(res, aes(x = Time, fill = as.factor(`Social Media`))) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Density of Time and Social Media") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill = "Activities")
+  
+plot3
 ```
 
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+plot <- ggplot(res, aes(x = `Social Media`, fill = as.factor(Activity))) +
+  geom_density(alpha = 0.5) +
+  ggtitle("Density")
+plot
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+ggplot(res, aes(x = `Social Media`, y = Time, fill = Activity)) +
+  geom_bar(stat = "identity", position="dodge") +
+  # labs(x = "Answer 1", y = "Answer 2", fill = "Answer 3") +
+  ggtitle("Activity Time per Social Media") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library(ggplot2)
+
+ggplot(res, aes(x = Gender)) +
+  geom_bar() +
+  labs(title = "Gender Distribution") +
+  xlab("Gender") +
+  ylab("Count")
+
+```
+
+```{r}
+ggplot(data, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "white") +
+  labs(title = "Age Distribution") +
+  xlab("Age") +
+  ylab("Count")
+```
+
+
+```{r}
+plot_1 <- ggplot(res, aes(x=Age, fill = Gender)) + 
+  geom_density(alpha = 0.5) +
+  ggtitle("Gender Age Distribution") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+plot_1
+```
+
+
+```{r}
+library(dplyr)
+
+program_counts <- res %>%
+  count(`Academic Program`)
+
+ggplot(program_counts, aes(x = "", y = n, fill = `Academic Program`)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Academic Program Distribution") +
+  xlab("") +
+  ylab("Count") +
+  coord_polar("y", start = 0)
+
+```
+
+```{r}
+degree_counts <- res %>%
+  count(Degree, Gender)
+
+ggplot(degree_counts, aes(x = Degree, y = n, fill = Gender)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Degree Distribution by Gender") +
+  xlab("Degree") +
+  ylab("Count") +
+  scale_fill_manual(values = c("steelblue", "lightblue")) +
+  theme(legend.position = "top")
+```
+
+
+

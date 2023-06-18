@@ -2,29 +2,29 @@
 title: "Data Acquisition Assignment 2 Report"
 author: "Artur Ohanian, Artur Sogomonyan, Anastasia Cissa"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: 
+  pdf_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+\newpage
+# Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+\newpage
+# Data Set Description
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+\newpage
+# Exploratory Data Analysis
 
-```{r cars}
-summary(cars)
-```
+\newpage
+# Descriptive Inference
 
-## Including Plots
+\newpage
+# Analytic Inference
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+\newpage
+# Conclusions
