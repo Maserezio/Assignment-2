@@ -134,5 +134,64 @@ ggplot(degree_counts, aes(x = Degree, y = n, fill = Gender)) +
   theme(legend.position = "top")
 ```
 
+```{r}
+# Assuming your data is stored in a data frame called 'data'
 
+# Selecting only the numeric columns for correlation analysis
+numeric_data <- res[, c("Age", "Time")]
+
+# Computing the correlation matrix
+cor_matrix <- cor(numeric_data)
+
+# Plotting the correlation matrix as a heatmap
+library(ggplot2)
+library(reshape2)
+
+cor_matrix_melted <- melt(cor_matrix)
+
+ggplot(cor_matrix_melted, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1, 1), name = "Correlation") +
+  labs(title = "Correlation Matrix") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_equal()
+
+```
+
+```{r}
+# Install and load required packages
+# install.packages("caret")
+library(caret)
+
+# Perform label encoding for non-numeric variables
+encoded_data <- res
+non_numeric_vars <- c("Gender", "Academic Program", "Degree", "University", "Social Media", "Activity")
+
+for (var in non_numeric_vars) {
+  encoded_data[[var]] <- as.numeric(as.factor(encoded_data[[var]]))
+}
+
+# Compute correlation matrix for all variables
+cor_matrix <- cor(encoded_data)
+
+# Plot correlation matrix as a heatmap
+library(ggplot2)
+library(reshape2)
+
+cor_matrix_melted <- melt(cor_matrix)
+
+ggplot(cor_matrix_melted, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1, 1), name = "Correlation") +
+  labs(title = "Correlation Matrix") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_equal()
+
+```
+
+```{r}
+encoded_data
+```
 
